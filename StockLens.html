@@ -138,6 +138,46 @@ textarea::placeholder{color:var(--fg3)}
 .dc-rng{font-family:var(--mono);font-size:9px;color:var(--fg3);margin-bottom:6px}
 .dc-why{font-size:11px;color:var(--fg2);line-height:1.5}
 
+/* ── Markov regime panel ── */
+.regime-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+@media(max-width:560px){.regime-grid{grid-template-columns:1fr 1fr}}
+.regime-box{background:var(--s2);border-radius:8px;padding:10px 11px;border:1px solid var(--border);position:relative}
+.regime-box.is-current{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue) inset}
+.regime-name{font-size:10px;font-weight:600;margin-bottom:6px;line-height:1.3}
+.regime-now-tag{font-family:var(--mono);font-size:8px;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;display:block}
+.regime-prob{font-family:var(--mono);font-size:17px;font-weight:600;letter-spacing:-.3px}
+.regime-track{height:4px;background:var(--s3);border-radius:2px;margin-top:6px;overflow:hidden}
+.regime-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.regime-stats{font-size:9px;color:var(--fg3);margin-top:5px;line-height:1.4}
+.regime-sub{font-size:11px;color:var(--fg3);line-height:1.6;padding-top:10px;border-top:1px solid var(--border)}
+.regime-sub b{color:var(--fg2)}
+
+/* MC stat badges inside day cards */
+.dc-mc-row{display:flex;gap:6px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.dc-mc-stat{flex:1;text-align:center}
+.dc-mc-lbl{font-family:var(--mono);font-size:8px;color:var(--fg3);text-transform:uppercase;letter-spacing:.04em}
+.dc-mc-val{font-family:var(--mono);font-size:11px;font-weight:600;margin-top:2px}
+
+.mc-note{font-size:10px;color:var(--fg3);background:var(--s2);border-radius:8px;padding:10px 13px;margin:8px 0 0;line-height:1.6}
+
+/* ── 10-day MC table ── */
+.mc10-wrap{overflow-x:auto}
+.mc10-table{width:100%;border-collapse:collapse;min-width:640px}
+.mc10-table th{font-family:var(--mono);font-size:9px;color:var(--fg3);text-transform:uppercase;letter-spacing:.06em;text-align:right;padding:8px 10px;border-bottom:1px solid var(--border2);white-space:nowrap}
+.mc10-table th:first-child,.mc10-table td:first-child{text-align:left}
+.mc10-table td{font-family:var(--mono);font-size:11.5px;padding:8px 10px;border-bottom:1px solid var(--border);white-space:nowrap;text-align:right}
+.mc10-table tr:hover td{background:var(--s2)}
+.mc10-day{font-weight:600;color:var(--fg)}
+.mc10-date{font-size:9px;color:var(--fg3);font-family:var(--sans)}
+.mc10-median{font-weight:600}
+.mc10-band-cell{padding:8px 10px 8px 4px !important}
+.mc10-band-track{height:14px;background:var(--s3);border-radius:7px;position:relative;min-width:140px}
+.mc10-band-fill{position:absolute;top:0;bottom:0;border-radius:7px;background:linear-gradient(90deg,rgba(240,82,82,.35),rgba(245,158,11,.35),rgba(34,216,122,.35))}
+.mc10-band-med{position:absolute;top:-2px;width:3px;height:18px;background:var(--fg);border-radius:2px}
+.mc10-chg-pos{color:var(--green)}
+.mc10-chg-neg{color:var(--red)}
+.mc10-chg-flat{color:var(--amber)}
+
 /* roadmap */
 .rtl{padding-left:16px;border-left:1px solid var(--border)}
 .ri{position:relative;padding:0 0 16px 14px}
@@ -298,9 +338,25 @@ Minimum 30 rows recommended."></textarea>
     </div>
   </div>
 
-  <!-- 3-day forecast -->
-  <div class="sec">3-day price forecast</div>
+  <!-- 3-day forecast (RULE-BASED) -->
+  <div class="sec">3-day price forecast — rule-based (technical signals)</div>
   <div class="dgrid" id="dDays">—</div>
+
+  <!-- ═══ NEW: Markov + Monte Carlo statistical forecast ═══ -->
+  <div class="sec">Market regime — 4-state Markov chain</div>
+  <div class="card" id="regimeCard">—</div>
+
+  <div class="sec">3-day price forecast — statistical preview (Monte Carlo + Markov)</div>
+  <div class="dgrid" id="dDaysMC">—</div>
+
+  <div class="sec">10-day stopping-point table — Monte Carlo + Markov</div>
+  <div class="card" id="mc10Table">—</div>
+
+  <div class="sec">Monte Carlo simulation — 10,000 paths, 10-day horizon</div>
+  <div class="chart-card">
+    <canvas id="chartMC" height="220"></canvas>
+  </div>
+  <div class="mc-note" id="mcCaveat" style="display:none"></div>
 
   <!-- Momentum chart — canvas IS IN THE HTML -->
   <div class="sec">Momentum — last 30 sessions vs start</div>
@@ -333,7 +389,7 @@ Minimum 30 rows recommended."></textarea>
 
 <script>
 // ── Globals ────────────────────────────────────────────────────────────────
-let chartPrice = null, chartMom = null;
+let chartPrice = null, chartMom = null, chartMC = null;
 
 function C() { return document.getElementById('iCur').value; }
 function f(n) {
@@ -430,6 +486,194 @@ function rsi14(closes){
   return +(100-100/(1+(g/14)/(l/14))).toFixed(1);
 }
 
+// ─────────────────────────────────────────────────────────────────────────
+// MONTE CARLO ENGINE — Geometric Brownian Motion
+//
+// S(t+1) = S(t) * exp( (mu - sigma^2/2)*dt + sigma*sqrt(dt)*Z )
+//
+// mu, sigma = drift and volatility of DAILY LOG RETURNS, estimated from
+// the pasted price history. Z ~ N(0,1) drawn via Box–Muller transform.
+// This is the same model used for option pricing / VaR simulation
+// referenced in the methodology document (Monte Carlo §, "geometric
+// Brownian motion"). Error of the resulting estimate shrinks ~ 1/sqrt(N),
+// per the Law of Large Numbers — hence we run a large N (10,000) paths.
+// ─────────────────────────────────────────────────────────────────────────
+
+// Box–Muller: turns 2 uniform randoms into 1 standard-normal random
+function randNormal(){
+  let u=0,v=0;
+  while(u===0) u=Math.random();
+  while(v===0) v=Math.random();
+  return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+}
+
+// Daily log returns: r_t = ln(P_t / P_{t-1})
+function logReturns(closes){
+  const r=[];
+  for(let i=1;i<closes.length;i++) r.push(Math.log(closes[i]/closes[i-1]));
+  return r;
+}
+
+function stdev(arr, mean){
+  const m = mean===undefined ? avg(arr) : mean;
+  const v = avg(arr.map(x=>(x-m)*(x-m)));
+  return Math.sqrt(v);
+}
+
+/**
+ * Runs N independent GBM simulations, `horizon` trading days ahead.
+ * Returns, for each future day, the sorted array of all N simulated prices
+ * (so we can read off percentiles), plus a few representative paths to draw.
+ *
+ * @param {number} S0      current price
+ * @param {number} mu       daily drift (mean log return), can be regime-adjusted
+ * @param {number} sigma    daily volatility (stdev of log return), can be regime-adjusted
+ * @param {number} horizon  number of days to simulate forward
+ * @param {number} N        number of Monte Carlo paths
+ */
+function runMonteCarlo(S0, mu, sigma, horizon, N){
+  // dayPrices[d] = Float64Array of N simulated prices at day d (d=0..horizon-1)
+  const dayPrices = [];
+  for(let d=0; d<horizon; d++) dayPrices.push(new Float64Array(N));
+
+  // Keep a handful of sample paths (for the fan-chart spaghetti lines)
+  const sampleCount = 40;
+  const samplePaths = [];
+  for(let s=0; s<sampleCount; s++) samplePaths.push(new Float64Array(horizon+1));
+
+  for(let i=0;i<N;i++){
+    let S = S0;
+    const keepSample = i < sampleCount;
+    if(keepSample) samplePaths[i][0] = S0;
+    for(let d=0; d<horizon; d++){
+      const Z = randNormal();
+      S = S * Math.exp((mu - 0.5*sigma*sigma) + sigma*Z); // dt = 1 trading day
+      dayPrices[d][i] = S;
+      if(keepSample) samplePaths[i][d+1] = S;
+    }
+  }
+
+  // Percentile readout per day: 10th / 50th (median) / 90th
+  const stats = dayPrices.map(arr=>{
+    const sorted = Array.from(arr).sort((a,b)=>a-b);
+    const pct = p => sorted[Math.min(sorted.length-1, Math.floor(p*sorted.length))];
+    return {
+      p10: pct(0.10),
+      p25: pct(0.25),
+      median: pct(0.50),
+      p75: pct(0.75),
+      p90: pct(0.90),
+      mean: avg(sorted)
+    };
+  });
+
+  return { stats, samplePaths };
+}
+
+// ─────────────────────────────────────────────────────────────────────────
+// MARKOV REGIME-SWITCHING ENGINE — 4 discrete states
+//
+// State classification, based on rolling 10-day return & volatility,
+// split at the dataset's own median (so it adapts to each stock):
+//   0 = Low-Vol Bull   (return >= 0, vol <  median vol)
+//   1 = High-Vol Bull  (return >= 0, vol >= median vol)
+//   2 = Low-Vol Bear   (return <  0, vol <  median vol)
+//   3 = High-Vol Bear  (return <  0, vol >= median vol)
+//
+// Transition matrix P is built by counting actual day-to-day regime
+// transitions in history, then normalising each row to sum to 1, so that
+// the chain is a valid stochastic matrix (rows sum to 1, satisfying the
+// definition used in the reference document: pi = pi*P at stationarity).
+// We then take today's regime, look up row P[today], and use the
+// regime-weighted-average mu/sigma as the calibration for tomorrow's
+// Monte Carlo simulation — i.e. Markov chain selects the GBM parameters,
+// exactly the "use Markov chain to model regimes, then Monte Carlo
+// simulate within each regime" hybrid recommended in the document.
+// ─────────────────────────────────────────────────────────────────────────
+
+const REGIME_NAMES = ['Low-Vol Bull','High-Vol Bull','Low-Vol Bear','High-Vol Bear'];
+const REGIME_COLORS = ['var(--green)','#6ee7a0','#fca5a5','var(--red)'];
+
+function classifyRegimes(closes, window=10){
+  const rets = logReturns(closes);
+  const rolling = []; // {ret, vol} per day, aligned to closes[i] for i>=window
+  for(let i=window;i<rets.length;i++){
+    const slice = rets.slice(i-window, i);
+    rolling.push({ idx: i+1, ret: avg(slice), vol: stdev(slice) });
+  }
+  if(rolling.length < 8){
+    return { states: [], matrix: null, medianVol: 0 };
+  }
+  const medianVol = [...rolling.map(r=>r.vol)].sort((a,b)=>a-b)[Math.floor(rolling.length/2)];
+
+  const states = rolling.map(r=>{
+    if(r.ret>=0) return r.vol<medianVol ? 0 : 1; // bull
+    return r.vol<medianVol ? 2 : 3;               // bear
+  });
+
+  // Build transition counts
+  const counts = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+  for(let i=0;i<states.length-1;i++) counts[states[i]][states[i+1]]++;
+
+  // Normalise rows to probabilities; if a row has no observed transitions,
+  // fall back to uniform (every state equally likely) to keep the matrix valid.
+  const matrix = counts.map(row=>{
+    const sum = row.reduce((a,b)=>a+b,0);
+    if(sum===0) return [0.25,0.25,0.25,0.25];
+    return row.map(c=>c/sum);
+  });
+
+  // Per-regime mu/sigma — the average drift & vol observed historically
+  // while the chain was actually in that state. This is what calibrates
+  // the Monte Carlo simulation for "if we're in regime X tomorrow".
+  const regimeStats = [0,1,2,3].map(s=>{
+    const idxs = states.map((st,i)=>st===s?i:-1).filter(i=>i!==-1);
+    if(idxs.length===0) return { mu:0, sigma: medianVol||0.01, count:0 };
+    const muVals = idxs.map(i=>rolling[i].ret);
+    const sigVals = idxs.map(i=>rolling[i].vol);
+    return { mu: avg(muVals), sigma: avg(sigVals), count: idxs.length };
+  });
+
+  return { states, matrix, regimeStats, medianVol, currentState: states[states.length-1] };
+}
+
+/**
+ * Computes the regime probability distribution `horizon` days ahead,
+ * starting from today's known regime, by repeatedly applying P:
+ *   pi_1 = pi_0 * P
+ *   pi_2 = pi_1 * P  =  pi_0 * P^2
+ *   ... etc (standard Markov chain forward propagation)
+ */
+function projectRegimeProbabilities(matrix, currentState, horizon){
+  let pi = [0,0,0,0];
+  pi[currentState] = 1; // we know today's regime with certainty
+  const projections = [];
+  for(let d=0; d<horizon; d++){
+    const next = [0,0,0,0];
+    for(let j=0;j<4;j++){
+      for(let i=0;i<4;i++) next[j] += pi[i]*matrix[i][j];
+    }
+    pi = next;
+    projections.push([...pi]);
+  }
+  return projections;
+}
+
+/**
+ * Blends each regime's (mu, sigma) weighted by that regime's projected
+ * probability on a given day, giving a single "effective" mu/sigma to
+ * feed the Monte Carlo simulator for that day. This is the bridge between
+ * the Markov layer and the Monte Carlo layer.
+ */
+function blendedParams(regimeStats, regimeProb){
+  let mu=0, sigma=0;
+  for(let s=0;s<4;s++){
+    mu += regimeProb[s]*regimeStats[s].mu;
+    sigma += regimeProb[s]*regimeStats[s].sigma;
+  }
+  return { mu, sigma };
+}
+
 // ── Analysis engine ────────────────────────────────────────────────────────
 function buildAnalysis(entries, name){
   const closes = entries.map(e=>e.close);
@@ -476,6 +720,55 @@ function buildAnalysis(entries, name){
     total===-1?['LEAN DOWN','#fca5a5']:
     ['BEARISH','var(--red)'];
 
+  // ── Monte Carlo + Markov statistical forecast ──────────────────────────
+  const regime = classifyRegimes(closes, 10);
+  let mcResult = null, regimeProjection = null, regimeNow = null;
+  const MC_HORIZON = 10; // days ahead to forecast
+
+  if(regime.matrix && closes.length>=40){
+    regimeNow = regime.currentState;
+    regimeProjection = projectRegimeProbabilities(regime.matrix, regimeNow, MC_HORIZON);
+
+    // For each of the 10 forecast days, blend regime-weighted mu/sigma,
+    // then run an independent GBM Monte Carlo batch using that day's
+    // blended parameters (regime-conditioned simulation).
+    const horizon = MC_HORIZON;
+    const dayPricesAll = []; // [day][N] simulated prices
+    const N = 10000;
+    const sampleCount = 40;
+    const samplePaths = [];
+    for(let s=0;s<sampleCount;s++) samplePaths.push(new Float64Array(horizon+1));
+
+    for(let s=0;s<sampleCount;s++) samplePaths[s][0]=price;
+
+    // Run all N paths once, but use the DAY-SPECIFIC blended mu/sigma at each step
+    // (so the regime's evolving probability is reflected day by day)
+    const blendedByDay = regimeProjection.map(probs=>blendedParams(regime.regimeStats, probs));
+
+    for(let d=0;d<horizon;d++) dayPricesAll.push(new Float64Array(N));
+
+    for(let i=0;i<N;i++){
+      let S = price;
+      const keep = i<sampleCount;
+      for(let d=0;d<horizon;d++){
+        const {mu,sigma} = blendedByDay[d];
+        const sig = sigma>0 ? sigma : 0.015;
+        const Z = randNormal();
+        S = S*Math.exp((mu-0.5*sig*sig)+sig*Z);
+        dayPricesAll[d][i]=S;
+        if(keep) samplePaths[i][d+1]=S;
+      }
+    }
+
+    const stats = dayPricesAll.map(arr=>{
+      const sorted=Array.from(arr).sort((a,b)=>a-b);
+      const pct=p=>sorted[Math.min(sorted.length-1,Math.floor(p*sorted.length))];
+      return { p10:pct(0.10), p25:pct(0.25), median:pct(0.50), p75:pct(0.75), p90:pct(0.90), mean:avg(sorted) };
+    });
+
+    mcResult = { stats, samplePaths, N, horizon };
+  }
+
   return {
     name,price,chg,chgPct,hi,lo,rangePos,
     ma20,ma50,rsi:r,mom5,mom20,sup,res,
@@ -486,7 +779,8 @@ function buildAnalysis(entries, name){
     ma50l:maLine(closes,50),
     forecasts:makeForecast(price,total,r,ma20,sup,res),
     roadmap:makeRoadmap(price,ma20,ma50,sup,res,hi,r,total),
-    watches:makeWatches(price,ma20,sup,r,mom20)
+    watches:makeWatches(price,ma20,sup,r,mom20),
+    regime, mcResult, regimeProjection, regimeNow
   };
 }
 
@@ -649,6 +943,11 @@ function populate(d){
   });
   document.getElementById('dDays').innerHTML=dHtml;
 
+  // ── Markov regime panel + Monte Carlo statistical day cards ───────────
+  renderRegimePanel(d, CUR);
+  renderMCDayCards(d, CUR);
+  renderMC10Table(d, CUR);
+
   // Roadmap
   let rHtml='';
   d.roadmap.forEach(r=>{
@@ -674,6 +973,7 @@ function populate(d){
     requestAnimationFrame(()=>{
       drawPriceChart(d, CUR);
       drawMomChart(d);
+      drawMCChart(d, CUR);
     });
   });
 
@@ -709,6 +1009,140 @@ function drawPriceChart(d, CUR){
   });
 }
 
+// ── Markov regime panel ──────────────────────────────────────────────────
+function renderRegimePanel(d, CUR){
+  const card = document.getElementById('regimeCard');
+  if(!d.regime || !d.regime.matrix || !d.regimeProjection){
+    card.innerHTML = `<div class="regime-sub">Need at least 40 rows of data to build a reliable 4-state regime model. Add more history for this section.</div>`;
+    return;
+  }
+  const todayProb = [0,0,0,0]; todayProb[d.regimeNow] = 1;
+  const tomorrowProb = d.regimeProjection[0]; // 1 day ahead
+
+  let html = `<div class="regime-grid">`;
+  for(let s=0;s<4;s++){
+    const isCurrent = s===d.regimeNow;
+    const pct = (tomorrowProb[s]*100).toFixed(0);
+    const rs = d.regime.regimeStats[s];
+    html += `<div class="regime-box ${isCurrent?'is-current':''}">
+      ${isCurrent?'<span class="regime-now-tag">● Today</span>':''}
+      <div class="regime-name" style="color:${REGIME_COLORS[s]}">${REGIME_NAMES[s]}</div>
+      <div class="regime-prob">${pct}%</div>
+      <div class="regime-track"><div class="regime-fill" style="width:${pct}%;background:${REGIME_COLORS[s]}"></div></div>
+      <div class="regime-stats">μ ${(rs.mu*100).toFixed(2)}%/day · σ ${(rs.sigma*100).toFixed(2)}% · seen ${rs.count}×</div>
+    </div>`;
+  }
+  html += `</div>`;
+  html += `<div class="regime-sub">Today's regime is <b style="color:${REGIME_COLORS[d.regimeNow]}">${REGIME_NAMES[d.regimeNow]}</b> (classified from the last 10 trading sessions' return & volatility vs. this stock's own historical median). The percentages above are tomorrow's regime probabilities, computed from a transition matrix built by counting actual historical regime-to-regime moves: <b>π₁ = π₀ · P</b>. These probabilities directly calibrate the Monte Carlo simulation below — a blended drift (μ) and volatility (σ) weighted by regime likelihood.</div>`;
+  card.innerHTML = html;
+}
+
+// ── Monte Carlo statistical day cards ───────────────────────────────────
+function renderMCDayCards(d, CUR){
+  const wrap = document.getElementById('dDaysMC');
+  const caveat = document.getElementById('mcCaveat');
+  if(!d.mcResult){
+    wrap.innerHTML = `<div class="card" style="grid-column:1/-1"><div class="regime-sub" style="border-top:none;padding-top:0">Need at least 40 rows of data to run the Monte Carlo + Markov statistical forecast. Add more price history (ideally 120+ rows) for this section to appear.</div></div>`;
+    caveat.style.display='none';
+    return;
+  }
+  const now=new Date();
+  function nd(off){
+    const dt=new Date(now); dt.setDate(dt.getDate()+off);
+    for(let i=0;i<7&&(dt.getDay()===0||dt.getDay()===6);i++) dt.setDate(dt.getDate()+1);
+    return dt.toLocaleDateString('en-IN',{weekday:'short',month:'short',day:'numeric'});
+  }
+  let html='';
+  // Only the first 3 days get the big card treatment, to mirror the rule-based
+  // forecast above for an apples-to-apples comparison. The full 10-day breakdown
+  // is in the table below.
+  d.mcResult.stats.slice(0,3).forEach((s,i)=>{
+    const medChgPct = ((s.median-d.price)/d.price*100);
+    const dir = medChgPct>0.3?'dc-g':medChgPct<-0.3?'dc-r':'dc-a';
+    const dirTxt = medChgPct>0.3?'dir-g':medChgPct<-0.3?'dir-r':'dir-a';
+    const arrow = medChgPct>0.3?'↑':medChgPct<-0.3?'↓':'→';
+    html += `<div class="dc ${dir}">
+      <div class="dc-date">${nd(i+1)}</div>
+      <div class="dc-dir ${dirTxt}">${arrow} ${medChgPct>0?'+':''}${medChgPct.toFixed(2)}%</div>
+      <div class="dc-rng">Median: ${CUR}${s.median.toFixed(2)}</div>
+      <div class="dc-why">80% confidence interval: ${CUR}${s.p10.toFixed(2)} – ${CUR}${s.p90.toFixed(2)}</div>
+      <div class="dc-mc-row">
+        <div class="dc-mc-stat"><div class="dc-mc-lbl">P10</div><div class="dc-mc-val">${CUR}${s.p10.toFixed(0)}</div></div>
+        <div class="dc-mc-stat"><div class="dc-mc-lbl">P50</div><div class="dc-mc-val">${CUR}${s.median.toFixed(0)}</div></div>
+        <div class="dc-mc-stat"><div class="dc-mc-lbl">P90</div><div class="dc-mc-val">${CUR}${s.p90.toFixed(0)}</div></div>
+      </div>
+    </div>`;
+  });
+  wrap.innerHTML = html;
+  caveat.style.display='block';
+  caveat.innerHTML = `📐 <b>Method:</b> ${d.mcResult.N.toLocaleString('en-IN')} simulated price paths using Geometric Brownian Motion, with daily drift (μ) and volatility (σ) re-calibrated each day from the Markov regime probabilities. P10/P50/P90 = 10th/50th/90th percentile across all simulated outcomes — i.e. "10% of simulations ended below this, 50% below the median, 90% below this." This is a statistical distribution, not a guarantee — wide gaps between P10 and P90 mean genuinely high uncertainty, not a flaw in the model. See the full 10-day table below for the complete horizon.`;
+}
+
+// ── 10-day stopping-point table ─────────────────────────────────────────
+function renderMC10Table(d, CUR){
+  const wrap = document.getElementById('mc10Table');
+  if(!d.mcResult){
+    wrap.innerHTML = `<div class="regime-sub" style="border-top:none;padding-top:0">Need at least 40 rows of data to run the 10-day Monte Carlo + Markov projection. Add more price history (ideally 120+ rows) for this table to appear.</div>`;
+    return;
+  }
+  const now=new Date();
+  function nd(off){
+    const dt=new Date(now); dt.setDate(dt.getDate()+off);
+    for(let i=0;i<7&&(dt.getDay()===0||dt.getDay()===6);i++) dt.setDate(dt.getDate()+1);
+    return dt.toLocaleDateString('en-IN',{weekday:'short',month:'short',day:'numeric'});
+  }
+
+  // Find global min/max across all days' P10–P90 so the visual band bar
+  // is drawn to a consistent scale across every row (otherwise day 10's
+  // wide band would look identical in width to day 1's narrow band).
+  let globalMin = Infinity, globalMax = -Infinity;
+  d.mcResult.stats.forEach(s=>{
+    globalMin = Math.min(globalMin, s.p10);
+    globalMax = Math.max(globalMax, s.p90);
+  });
+  const span = globalMax - globalMin || 1;
+
+  let rows = '';
+  d.mcResult.stats.forEach((s,i)=>{
+    const medChgPct = ((s.median-d.price)/d.price*100);
+    const chgCls = medChgPct>0.3?'mc10-chg-pos':medChgPct<-0.3?'mc10-chg-neg':'mc10-chg-flat';
+    const arrow = medChgPct>0.3?'▲':medChgPct<-0.3?'▼':'→';
+
+    // Position the band within the global min/max scale, as percentages
+    const leftPct = ((s.p10-globalMin)/span)*100;
+    const widthPct = ((s.p90-s.p10)/span)*100;
+    const medPosPct = ((s.median-globalMin)/span)*100;
+
+    rows += `<tr>
+      <td><span class="mc10-day">Day ${i+1}</span><br><span class="mc10-date">${nd(i+1)}</span></td>
+      <td>${CUR}${s.p10.toFixed(2)}</td>
+      <td>${CUR}${s.p25.toFixed(2)}</td>
+      <td class="mc10-median">${CUR}${s.median.toFixed(2)}</td>
+      <td>${CUR}${s.p75.toFixed(2)}</td>
+      <td>${CUR}${s.p90.toFixed(2)}</td>
+      <td class="${chgCls}">${arrow} ${medChgPct>0?'+':''}${medChgPct.toFixed(2)}%</td>
+      <td class="mc10-band-cell">
+        <div class="mc10-band-track">
+          <div class="mc10-band-fill" style="left:${leftPct}%;width:${widthPct}%"></div>
+          <div class="mc10-band-med" style="left:${medPosPct}%"></div>
+        </div>
+      </td>
+    </tr>`;
+  });
+
+  wrap.innerHTML = `<div class="mc10-wrap">
+    <table class="mc10-table">
+      <thead><tr>
+        <th>Day</th><th>P10</th><th>P25</th><th>Median (P50)</th><th>P75</th><th>P90</th><th>Δ vs today</th><th>Range (visual)</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>
+  <div class="mc-note" style="margin-top:12px">
+    📐 <b>How to read this:</b> Each row is one trading day ahead, simulated using ${d.mcResult.N.toLocaleString('en-IN')} Geometric Brownian Motion paths recalibrated daily from the projected Markov regime mix. The <b>Median</b> column is the single most representative "where it stops" estimate for that day — but notice the P10–P90 spread widens the further out you look. That widening is mathematically expected: uncertainty compounds roughly with √(days ahead) under this model, so Day 10's range is naturally much wider than Day 1's. The white tick mark in the visual bar shows where the median sits within that day's full simulated range.
+  </div>`;
+}
+
 function drawMomChart(d){
   const canvas = document.getElementById('chartMom');
   if(!canvas) return;
@@ -729,6 +1163,82 @@ function drawMomChart(d){
       scales:{
         x:{ticks:{color:'#52577a',font:{size:9},maxTicksLimit:10}, grid:{display:false}},
         y:{ticks:{color:'#52577a',font:{family:'IBM Plex Mono',size:9},callback:v=>`${v}%`}, grid:{color:'rgba(255,255,255,0.04)'}}
+      }
+    }
+  });
+}
+
+function drawMCChart(d, CUR){
+  const canvas = document.getElementById('chartMC');
+  if(!canvas) return;
+  if(chartMC){chartMC.destroy();chartMC=null;}
+  if(!d.mcResult){
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.font = '12px Inter';
+    ctx.fillStyle = '#52577a';
+    ctx.textAlign = 'center';
+    ctx.fillText('Not enough data — paste 40+ rows to see the Monte Carlo simulation.', canvas.width/2, canvas.height/2);
+    return;
+  }
+
+  // Last 20 historical days as "lead-in" context, then N simulated days
+  const horizon = d.mcResult.horizon || d.mcResult.stats.length;
+  const histTail = d.closes.slice(-20);
+  const histDates = d.dates.slice(-20);
+  const dayLabels = Array.from({length:horizon}, (_,i)=>`Day ${i+1}`);
+  const labels = [...histDates, ...dayLabels];
+
+  const nHist = histTail.length;
+  const pad = arr => new Array(nHist).fill(null).concat(arr);
+
+  const p10Line   = pad(d.mcResult.stats.map(s=>s.p10));
+  const p90Line   = pad(d.mcResult.stats.map(s=>s.p90));
+  const medLine   = pad(d.mcResult.stats.map(s=>s.median));
+  const histLine  = [...histTail, ...new Array(horizon).fill(null)];
+
+  // A few faint sample paths for the "spaghetti" effect
+  const spaghetti = [];
+  const showN = 12;
+  for(let i=0;i<showN;i++){
+    const path = d.mcResult.samplePaths[i];
+    spaghetti.push({
+      label:'', data: pad(Array.from(path).slice(1)),
+      borderColor:'rgba(79,142,247,0.12)', borderWidth:1, pointRadius:0, fill:false, tension:.25
+    });
+  }
+
+  chartMC = new Chart(canvas,{
+    type:'line',
+    data:{
+      labels,
+      datasets:[
+        ...spaghetti,
+        { label:'P90 (90th pct)', data:p90Line, borderColor:'rgba(34,216,122,.55)', borderWidth:1.5, borderDash:[4,3], pointRadius:0, fill:'+1', backgroundColor:'rgba(79,142,247,.06)', tension:.25 },
+        { label:'P10 (10th pct)', data:p10Line, borderColor:'rgba(240,82,82,.55)', borderWidth:1.5, borderDash:[4,3], pointRadius:0, fill:false, tension:.25 },
+        { label:'Median (P50)', data:medLine, borderColor:'rgba(245,158,11,.95)', borderWidth:2, pointRadius:0, fill:false, tension:.25 },
+        { label:'Historical price', data:histLine, borderColor:'rgba(226,230,248,.9)', borderWidth:2, pointRadius:0, fill:false, tension:.25 },
+      ]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{
+          labels:{
+            color:'#9aa0c8', font:{family:'IBM Plex Mono',size:9}, boxWidth:16, padding:10,
+            filter: item => item.text !== ''  // hide the 12 unlabeled spaghetti paths from legend
+          }
+        },
+        tooltip:{
+          filter: item => item.dataset.label !== '',
+          callbacks:{label:ctx=>`${ctx.dataset.label}: ${CUR}${(ctx.raw||0).toFixed(2)}`}
+        }
+      },
+      scales:{
+        x:{ticks:{color:'#52577a',font:{size:9},maxRotation:0,maxTicksLimit:9}, grid:{color:'rgba(255,255,255,0.03)'}},
+        y:{ticks:{color:'#52577a',font:{family:'IBM Plex Mono',size:9},callback:v=>`${CUR}${(+v).toFixed(0)}`}, grid:{color:'rgba(255,255,255,0.04)'}}
       }
     }
   });
