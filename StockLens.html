@@ -199,6 +199,97 @@ textarea::placeholder{color:var(--fg3)}
 .v-b{font-size:13px;color:var(--fg2);line-height:1.7}
 
 .disc{font-size:10px;color:var(--fg3);border-top:1px solid var(--border);padding-top:12px;margin-top:20px;opacity:.55;line-height:1.6}
+
+/* ── Tab navigation ── */
+.tabs{display:flex;gap:4px;margin-bottom:20px;background:var(--s1);border:1px solid var(--border2);border-radius:12px;padding:4px}
+.tab-btn{flex:1;padding:9px 12px;border:none;border-radius:9px;background:none;color:var(--fg3);font-family:var(--sans);font-size:13px;font-weight:500;cursor:pointer;transition:all .18s;white-space:nowrap}
+.tab-btn:hover{color:var(--fg);background:var(--s2)}
+.tab-btn.active{background:var(--s2);color:var(--fg);border:1px solid var(--border2)}
+.tab-pane{display:none}.tab-pane.active{display:block}
+
+/* ── Trade Edge tab ── */
+.te-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:600px){.te-grid{grid-template-columns:1fr}}
+.te-card{background:var(--s1);border:1px solid var(--border2);border-radius:var(--r);padding:16px 18px}
+.te-card h3{font-size:11px;font-family:var(--mono);color:var(--fg3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.te-card h3 span{font-size:14px}
+.te-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.te-full{margin-bottom:10px}
+.te-field{display:flex;flex-direction:column;gap:4px}
+.te-field label{font-size:10px;color:var(--fg3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em}
+.te-field input{background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:8px 11px;color:var(--fg);font-family:var(--mono);font-size:13px;outline:none;transition:border .15s}
+.te-field input:focus{border-color:var(--blue)}
+.te-btn{background:var(--blue);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-size:13px;font-weight:600;cursor:pointer;transition:opacity .15s;width:100%;margin-top:6px}
+.te-btn:hover{opacity:.85}
+.te-btn-ghost{background:none;color:var(--fg2);border:1px solid var(--border2);border-radius:8px;padding:8px 16px;font-size:12px;cursor:pointer;transition:border .15s;margin-top:4px;width:100%}
+.te-btn-ghost:hover{border-color:var(--blue)}
+
+/* Result panels */
+.te-result{display:none;margin-top:14px;border-top:1px solid var(--border);padding-top:14px}
+.te-result.show{display:block}
+.te-metric{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)}
+.te-metric:last-child{border-bottom:none}
+.te-metric-lbl{font-size:11px;color:var(--fg3)}
+.te-metric-val{font-family:var(--mono);font-size:14px;font-weight:600}
+.te-verdict{margin-top:12px;padding:12px 14px;border-radius:8px;font-size:12px;line-height:1.6}
+.tv-pos{background:var(--green-d);border:1px solid rgba(34,216,122,.2);color:var(--green)}
+.tv-neg{background:var(--red-d);border:1px solid rgba(240,82,82,.2);color:var(--red)}
+.tv-warn{background:var(--amber-d);border:1px solid rgba(245,158,11,.2);color:var(--amber)}
+
+/* Expectancy curve chart card — full width */
+.te-full-card{background:var(--s1);border:1px solid var(--border2);border-radius:var(--r);padding:16px 18px;margin-bottom:14px}
+.te-full-card h3{font-size:11px;font-family:var(--mono);color:var(--fg3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.te-chart-wrap{position:relative;height:260px}
+
+/* Strategy profiler table */
+.prof-table{width:100%;border-collapse:collapse;font-size:12px}
+.prof-table th{font-family:var(--mono);font-size:9px;color:var(--fg3);text-transform:uppercase;letter-spacing:.06em;padding:7px 10px;border-bottom:1px solid var(--border2);text-align:left}
+.prof-table td{padding:8px 10px;border-bottom:1px solid var(--border);color:var(--fg2);line-height:1.4}
+.prof-table tr.your-row td{background:rgba(79,142,247,.07);color:var(--fg)}
+.prof-match{font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px;background:var(--blue-d);color:var(--blue)}
+
+/* CSV input area for trade log */
+.te-csv{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--fg);font-family:var(--mono);font-size:10.5px;resize:vertical;min-height:80px;outline:none;transition:border .15s;line-height:1.6}
+.te-csv:focus{border-color:var(--blue)}
+.te-csv::placeholder{color:var(--fg3)}
+.te-tabs-inner{display:flex;gap:4px;margin-bottom:10px}
+.te-tab-inner{padding:5px 14px;border:1px solid var(--border);border-radius:6px;background:none;color:var(--fg3);font-size:11px;cursor:pointer;transition:all .15s}
+.te-tab-inner.on{background:var(--s2);border-color:var(--blue);color:var(--fg)}
+.te-pane-inner{display:none}.te-pane-inner.on{display:block}
+
+/* Ruin gauge */
+.ruin-gauge{display:flex;align-items:center;gap:14px;margin-top:10px}
+.ruin-num{font-family:var(--mono);font-size:32px;font-weight:600;letter-spacing:-1.5px;min-width:90px}
+.ruin-track{flex:1;height:8px;background:var(--s3);border-radius:4px;overflow:hidden}
+.ruin-fill{height:100%;border-radius:4px;transition:width .6s ease}
+
+/* ── Pattern detection ── */
+.pat-grid{display:flex;flex-direction:column;gap:8px}
+.pat-item{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;background:var(--s2);border-radius:8px;border-left:3px solid var(--border2)}
+.pat-item.bull{border-left-color:var(--green)}
+.pat-item.bear{border-left-color:var(--red)}
+.pat-item.neut{border-left-color:var(--amber)}
+.pat-icon{font-size:20px;flex-shrink:0;margin-top:1px}
+.pat-body{}
+.pat-name{font-size:13px;font-weight:600;letter-spacing:-.2px;margin-bottom:3px}
+.pat-desc{font-size:11px;color:var(--fg3);line-height:1.55;margin-bottom:5px}
+.pat-target{font-size:11px;line-height:1.5}
+.pat-conf{display:inline-block;font-family:var(--mono);font-size:9px;padding:2px 7px;border-radius:4px;margin-top:4px}
+.conf-h{background:var(--green-d);color:var(--green)}
+.conf-m{background:var(--amber-d);color:var(--amber)}
+.conf-l{background:var(--red-d);color:var(--red)}
+.no-pattern{font-size:12px;color:var(--fg3);padding:10px 0;line-height:1.6}
+
+/* ── Profit window ── */
+.pw-banner{border-radius:12px;padding:18px 20px;margin-bottom:12px}
+.pw-when{font-size:22px;font-weight:700;letter-spacing:-.5px;margin-bottom:6px}
+.pw-body{font-size:12px;line-height:1.7}
+.pw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+@media(max-width:540px){.pw-grid{grid-template-columns:1fr}}
+.pw-card{background:var(--s2);border-radius:8px;padding:12px 13px}
+.pw-lbl{font-size:10px;font-family:var(--mono);color:var(--fg3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+.pw-val{font-size:16px;font-weight:600;letter-spacing:-.3px}
+.pw-sub{font-size:10px;color:var(--fg3);margin-top:2px}
 </style>
 </head>
 <body>
@@ -213,7 +304,15 @@ textarea::placeholder{color:var(--fg3)}
   <div class="badge">● OFFLINE</div>
 </div>
 
-<!-- How-to -->
+<!-- Tab navigation -->
+<div class="tabs">
+  <button class="tab-btn active" onclick="switchTab('stock')">📊 Stock Analyser</button>
+  <button class="tab-btn" onclick="switchTab('edge')">🎯 Trade Edge Calculator</button>
+</div>
+
+<!-- ═══ TAB 1: Stock Analyser (existing content) ═══ -->
+<div class="tab-pane active" id="tab-stock">
+
 <div class="howto">
   <h3>How to use — 3 steps</h3>
   <div class="how-grid">
@@ -382,14 +481,97 @@ Minimum 30 rows recommended."></textarea>
     <div class="v-b" id="dVerdict">—</div>
   </div>
 
+  <!-- ═══ Pattern Detection ═══ -->
+  <div class="sec">Chart pattern detection</div>
+  <div class="card" id="dPatternCard">
+    <div style="font-size:12px;color:var(--fg3);padding:8px 0">Run analysis to detect patterns.</div>
+  </div>
+
+  <!-- ═══ 10-Day Forward Projection Chart ═══ -->
+  <div class="sec">10-day forward price projection — patterns + Monte Carlo</div>
+  <div class="chart-card">
+    <canvas id="chartFwd" height="260"></canvas>
+  </div>
+  <div class="mc-note" id="fwdNote" style="display:none"></div>
+
+  <!-- ═══ Major Profit Window ═══ -->
+  <div class="sec">When will this stock give major profit?</div>
+  <div class="card" id="dProfitWindow">
+    <div style="font-size:12px;color:var(--fg3);padding:8px 0">Run analysis to estimate profit window.</div>
+  </div>
+
   <div class="disc">StockLens analyses your pasted data using RSI, moving averages, momentum, and range position. Runs entirely in your browser — nothing is sent anywhere. Not financial advice. Consult a SEBI-registered advisor before investing.</div>
 
 </div><!-- #dash -->
+</div><!-- #tab-stock -->
+
+<!-- ═══ TAB 2: Can I Trade This Stock for Profit? ═══ -->
+<div class="tab-pane" id="tab-edge">
+
+  <!-- Step 1: Input -->
+  <div class="te-full-card">
+    <h3><span>📂</span> Step 1 — Paste the stock's price history</h3>
+    <p style="font-size:12px;color:var(--fg3);margin-bottom:12px;line-height:1.6">Same CSV you use in the Stock Analyser tab. Go to <a href="https://finance.yahoo.com" target="_blank">finance.yahoo.com</a> → search the stock → Historical Data → Download. The more data the better — at least 6 months, ideally 1–2 years.</p>
+    <textarea class="te-csv" id="teCsv" style="min-height:100px" placeholder="Paste CSV here — Date,Open,High,Low,Close,Volume format (Yahoo Finance download works directly)"></textarea>
+
+    <h3 style="margin-top:18px"><span>💰</span> Step 2 — How much money do you have?</h3>
+    <div class="te-row" style="margin-top:10px">
+      <div class="te-field">
+        <label>Your trading capital</label>
+        <input id="teCapital" type="number" placeholder="e.g. 100000" min="1000"/>
+      </div>
+      <div class="te-field">
+        <label>Currency</label>
+        <select id="teCurr" style="background:var(--s2);border:1px solid var(--border);border-radius:7px;padding:8px 11px;color:var(--fg);font-size:13px;outline:none">
+          <option value="₹">₹ Rupee</option>
+          <option value="$">$ Dollar</option>
+          <option value="£">£ Pound</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="te-btn" style="margin-top:14px" onclick="runTradeEdge()">Analyse this stock →</button>
+    <button class="te-btn-ghost" style="margin-top:6px;width:auto;padding:8px 18px" onclick="loadEdgeDemo()">Try with demo data</button>
+    <div id="teErr" style="display:none;margin-top:10px;color:var(--red);font-size:12px;background:var(--red-d);padding:10px 13px;border-radius:8px"></div>
+  </div>
+
+  <!-- Results — hidden until analysed -->
+  <div id="teResults" style="display:none">
+
+    <!-- Big verdict banner -->
+    <div id="teBanner" style="border-radius:14px;padding:22px 24px;margin-bottom:14px;border:1px solid"></div>
+
+    <!-- Three timeframe cards -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px" id="teTFGrid">
+    </div>
+
+    <!-- What to actually do card -->
+    <div class="te-full-card" id="teActionCard">
+      <h3><span>🎯</span> What should I actually do?</h3>
+      <div id="teAction" style="font-size:13px;color:var(--fg2);line-height:1.85"></div>
+    </div>
+
+    <!-- Under the hood — collapsible -->
+    <div class="te-full-card">
+      <h3 style="cursor:pointer" onclick="toggleHood()"><span>🔧</span> Under the hood — how we calculated this <span id="hoodArrow" style="float:right;font-size:11px;color:var(--fg3)">▼ show</span></h3>
+      <div id="teHood" style="display:none;margin-top:12px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px" id="teHoodGrid"></div>
+        <div class="mc-note" style="margin-top:12px">
+          <b>How the backtest works:</b> We simulate three different strategies on your historical data — each one using a different "lookback window" to match short, medium, and long-term trading. For each simulated trade, we record whether price went up or down. From those results we compute win rate, average gain, and average loss — then run them through the expectancy formula <b>E = ((1 + avgWin/avgLoss) × winRate) − 1</b> to find whether there was a real edge. Position size is calculated using the Kelly Criterion. All of this is based on past data only — past performance does not guarantee future results.
+        </div>
+      </div>
+    </div>
+
+    <div class="disc">Based on historical price simulation only. Not financial advice. Past results do not guarantee future profits. Always do your own research before investing.</div>
+  </div>
+
+</div><!-- #tab-edge -->
+
 </div><!-- .page -->
 
 <script>
 // ── Globals ────────────────────────────────────────────────────────────────
-let chartPrice = null, chartMom = null, chartMC = null;
+let chartPrice = null, chartMom = null, chartMC = null, chartFwd = null;
 
 function C() { return document.getElementById('iCur').value; }
 function f(n) {
@@ -425,46 +607,95 @@ function parseCSV(raw) {
   const lines = raw.trim().split('\n').map(l=>l.trim()).filter(Boolean);
   if(lines.length < 5) throw new Error('Too few rows — need at least 5.');
 
-  const hdr = lines[0].toLowerCase().replace(/"/g,'');
-  const cols = hdr.split(/[,;\t]/);
-  let di=-1, ci=-1;
-  cols.forEach((c,i)=>{
-    const t=c.trim();
-    if(di===-1 && /date|time|timestamp/.test(t)) di=i;
-    if(ci===-1 && /^(close|adj\.?\s*close|close\/last|price|last)$/.test(t)) ci=i;
-  });
-  if(di===-1) di=0;
-  if(ci===-1) {
-    // find first numeric col != di
-    const first=lines[1].split(/[,;\t]/);
-    for(let i=0;i<first.length;i++){
-      if(i!==di && !isNaN(parseFloat(first[i].replace(/[",₹$£€\s]/g,'')))){ci=i;break;}
-    }
-    if(ci===-1) ci=1;
-  }
-
-  const startAt = /[a-zA-Z]/.test((lines[0].split(/[,;\t]/)[ci]||'')) ? 1 : 0;
-  const out=[];
-  for(let i=startAt;i<lines.length;i++){
-    const p=lines[i].split(/[,;\t]/);
-    const rawD=(p[di]||'').replace(/"/g,'').trim();
-    const rawC=(p[ci]||'').replace(/[",₹$£€\s]/g,'').trim();
-    const close=parseFloat(rawC);
-    if(!rawD||isNaN(close)||close<=0) continue;
-    let d=new Date(rawD);
-    if(isNaN(d.getTime())){
-      const pts=rawD.split(/[-\/]/);
-      if(pts.length===3){
-        const mo={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
-        const m=mo[pts[1].toLowerCase().slice(0,3)];
-        d=m!==undefined ? new Date(+pts[2],m,+pts[0]) : new Date(+pts[2],+pts[1]-1,+pts[0]);
+  // ── RFC-4180 quoted-field-aware row splitter ──────────────────────────
+  // This correctly handles "2,310.50" (quoted number with thousands comma)
+  // which NSE, BSE, Bloomberg, and many Indian brokers use.
+  function splitRow(line) {
+    const fields = [];
+    let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') {
+        inQ = !inQ; // toggle quoted mode — don't add the quote char
+      } else if ((ch === ',' || ch === ';' || ch === '\t') && !inQ) {
+        fields.push(cur.trim()); cur = ''; // field boundary
+      } else {
+        cur += ch;
       }
     }
-    if(isNaN(d.getTime())) continue;
-    out.push({d,close});
+    fields.push(cur.trim());
+    return fields;
   }
-  if(out.length<10) throw new Error(`Only ${out.length} valid rows found. Check that Date and Close columns exist.`);
-  out.sort((a,b)=>a.d-b.d);
+
+  // Clean a numeric string: remove thousands commas, currency symbols, spaces
+  // e.g. "2,310.50" → 2310.50 | "₹1,23,456.78" → 123456.78
+  function cleanNum(s) {
+    return parseFloat(s.replace(/[₹$£€\s,]/g, '').replace(/[^0-9.\-]/g, ''));
+  }
+
+  // ── Detect header ─────────────────────────────────────────────────────
+  const hdrFields = splitRow(lines[0].toLowerCase());
+  let di = -1, ci = -1;
+  hdrFields.forEach((c, i) => {
+    const t = c.replace(/"/g,'').trim();
+    if (di === -1 && /date|time|timestamp/.test(t)) di = i;
+    if (ci === -1 && /^(close|adj\.?\s*close|close\/last|price|last)$/.test(t)) ci = i;
+  });
+  if (di === -1) di = 0;
+  if (ci === -1) {
+    // No "close" header found — find first numeric column that isn't the date col
+    const firstData = splitRow(lines[1]);
+    for (let i = 0; i < firstData.length; i++) {
+      if (i !== di && !isNaN(cleanNum(firstData[i])) && cleanNum(firstData[i]) > 0) {
+        ci = i; break;
+      }
+    }
+    if (ci === -1) ci = 1;
+  }
+
+  const startAt = hdrFields.some(h => /date|close|open|high|low|price/i.test(h)) ? 1 : 0;
+
+  // ── Parse rows ────────────────────────────────────────────────────────
+  const out = [];
+  for (let i = startAt; i < lines.length; i++) {
+    const fields = splitRow(lines[i]);
+    if (fields.length < 2) continue;
+
+    const rawD = (fields[di] || '').replace(/"/g,'').trim();
+    const rawC = fields[ci] || '';
+    const close = cleanNum(rawC);
+
+    if (!rawD || isNaN(close) || close <= 0) continue;
+
+    // Parse date flexibly
+    let d = new Date(rawD);
+    if (isNaN(d.getTime())) {
+      const pts = rawD.split(/[-\/]/);
+      if (pts.length === 3) {
+        const mo = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+        const m = mo[pts[1].toLowerCase().slice(0,3)];
+        if (m !== undefined) {
+          // DD-Mon-YYYY
+          d = new Date(+pts[2], m, +pts[0]);
+        } else if (+pts[0] > 31) {
+          // YYYY-MM-DD (already tried above, may have failed for locale)
+          d = new Date(+pts[0], +pts[1]-1, +pts[2]);
+        } else {
+          // DD/MM/YYYY
+          d = new Date(+pts[2], +pts[1]-1, +pts[0]);
+        }
+      }
+    }
+    if (isNaN(d.getTime())) continue;
+    out.push({ d, close });
+  }
+
+  if (out.length < 10) throw new Error(
+    `Only ${out.length} valid rows found. ` +
+    `Check that your CSV has Date and Close columns. ` +
+    `Tip: if downloaded from NSE/BSE, open the file in a text editor and paste directly — do not open in Excel first as Excel can corrupt the format.`
+  );
+  out.sort((a, b) => a.d - b.d);
   return out;
 }
 
@@ -775,6 +1006,7 @@ function buildAnalysis(entries, name){
     tl,tp,tn,ml,mp,dl,rl,rs2,
     ov,ovc,total,
     closes,dates,
+    entries,
     ma20l:maLine(closes,20),
     ma50l:maLine(closes,50),
     forecasts:makeForecast(price,total,r,ma20,sup,res),
@@ -968,12 +1200,18 @@ function populate(d){
   // Verdict
   setText('dVerdict',makeVerdict(d));
 
+  // Pattern detection + profit window (runs on raw data synchronously)
+  const patResult = detectPatterns(d.closes, d.dates, d.valid||[], CUR);
+  renderPatterns(patResult, CUR);
+  renderProfitWindow(patResult, d, CUR);
+
   // Draw charts AFTER dashboard is visible and browser has laid it out
   requestAnimationFrame(()=>{
     requestAnimationFrame(()=>{
       drawPriceChart(d, CUR);
       drawMomChart(d);
       drawMCChart(d, CUR);
+      drawFwdChart(d, patResult, CUR);
     });
   });
 
@@ -1244,6 +1482,483 @@ function drawMCChart(d, CUR){
   });
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// PATTERN DETECTION ENGINE
+//
+// Each pattern has a precise mathematical definition applied to the last
+// N bars of closing price (and High/Low where available).
+//
+// Patterns detected:
+//  1. Bull Flag  — sharp upward pole + tight downward-sloping consolidation
+//  2. Bear Flag  — sharp downward pole + tight upward-sloping consolidation
+//  3. Double Bottom — two troughs at similar price level, bullish reversal
+//  4. Double Top    — two peaks at similar price level, bearish reversal
+//  5. Ascending Triangle  — flat resistance + rising support
+//  6. Descending Triangle — flat support + falling resistance
+//  7. Head & Shoulders    — three-peak reversal (bearish)
+//  8. Inv. Head & Shoulders — three-trough reversal (bullish)
+//  9. Support Breakout    — price clears a level it bounced off 2+ times
+// 10. Resistance Breakout — price clears a ceiling it rejected 2+ times
+// ═══════════════════════════════════════════════════════════════════════════
+
+function linReg(arr){
+  // Returns {slope, intercept, r2} of least-squares line through arr
+  const n=arr.length, xi=Array.from({length:n},(_,i)=>i);
+  const mx=avg(xi), my=avg(arr);
+  let num=0,den=0,ssTot=0;
+  for(let i=0;i<n;i++){num+=(xi[i]-mx)*(arr[i]-my);den+=(xi[i]-mx)**2;}
+  const slope=den?num/den:0;
+  const intercept=my-slope*mx;
+  for(let i=0;i<n;i++){const pred=slope*i+intercept;num+=(arr[i]-pred)**2;ssTot+=(arr[i]-my)**2;}
+  return{slope,intercept,r2:ssTot?1-num/ssTot:1};
+}
+
+function localExtrema(arr,window=5){
+  // Returns peaks and troughs with their index
+  const peaks=[],troughs=[];
+  for(let i=window;i<arr.length-window;i++){
+    const slice=arr.slice(i-window,i+window+1);
+    if(arr[i]===Math.max(...slice)) peaks.push({i,v:arr[i]});
+    if(arr[i]===Math.min(...slice)) troughs.push({i,v:arr[i]});
+  }
+  return{peaks,troughs};
+}
+
+function detectPatterns(closes, dates, entries, cur){
+  const n=closes.length;
+  if(n<30) return{patterns:[],price:closes[n-1],cur};
+  const price=closes[n-1];
+  const patterns=[];
+  const {peaks,troughs}=localExtrema(closes,5);
+
+  // ── 1 & 2. Flag patterns ──────────────────────────────────────────────
+  // Pole: large directional move in last 5–15 bars (>4%)
+  // Consolidation: last 8 bars slope opposite to pole, tight range
+  if(n>=25){
+    const poleWindow=12, flagWindow=8;
+    const poleStart=closes[n-poleWindow-flagWindow];
+    const poleEnd=closes[n-flagWindow];
+    const poleMove=(poleEnd-poleStart)/poleStart*100;
+    const flagSlice=closes.slice(n-flagWindow);
+    const {slope:flagSlope}=linReg(flagSlice);
+    const flagRange=(Math.max(...flagSlice)-Math.min(...flagSlice))/price*100;
+
+    if(Math.abs(poleMove)>4 && flagRange<3){
+      if(poleMove>4 && flagSlope<0){
+        const target=price+(poleEnd-poleStart);
+        const targetPct=((target-price)/price*100).toFixed(1);
+        patterns.push({
+          type:'bull',icon:'🚩',name:'Bull Flag',
+          conf:flagRange<1.5?'high':'medium',
+          desc:`Price made a sharp ${poleMove.toFixed(1)}% move upward (the pole), then consolidated in a tight downward channel — classic continuation pattern.`,
+          target:`Projected target: ${cur}${target.toFixed(2)} (+${targetPct}%)`,
+          targetPct:+targetPct, targetPrice:target,
+          daysEst:Math.round(flagWindow*1.5),
+          raw:{poleMove,flagRange,flagSlope}
+        });
+      } else if(poleMove<-4 && flagSlope>0){
+        const target=price-(poleEnd-poleStart);
+        const targetPct=((target-price)/price*100).toFixed(1);
+        patterns.push({
+          type:'bear',icon:'🚩',name:'Bear Flag',
+          conf:flagRange<1.5?'high':'medium',
+          desc:`Price dropped sharply ${Math.abs(poleMove).toFixed(1)}% (the pole), then bounced in a tight upward channel — this is typically a continuation of the downtrend.`,
+          target:`Projected target: ${cur}${target.toFixed(2)} (${targetPct}%)`,
+          targetPct:+targetPct, targetPrice:target,
+          daysEst:Math.round(flagWindow*1.5),
+          raw:{poleMove,flagRange,flagSlope}
+        });
+      }
+    }
+  }
+
+  // ── 3. Double Bottom ──────────────────────────────────────────────────
+  // Two troughs within 3% of each other, separated by 10+ bars, with a
+  // neckline above them. Bullish reversal.
+  if(troughs.length>=2){
+    const t1=troughs[troughs.length-2], t2=troughs[troughs.length-1];
+    const gap=t2.i-t1.i;
+    const diff=Math.abs(t1.v-t2.v)/Math.min(t1.v,t2.v)*100;
+    if(gap>=10 && diff<3 && t2.i>=n-15){
+      const neckline=Math.max(...closes.slice(t1.i,t2.i));
+      const height=neckline-Math.min(t1.v,t2.v);
+      const target=neckline+height;
+      const targetPct=((target-price)/price*100).toFixed(1);
+      patterns.push({
+        type:'bull',icon:'W',name:'Double Bottom',
+        conf:diff<1.5?'high':'medium',
+        desc:`Two troughs formed at nearly the same level (${cur}${t1.v.toFixed(2)} and ${cur}${t2.v.toFixed(2)}), ${gap} bars apart — a classic W-shaped reversal pattern indicating buyers defending that price level.`,
+        target:`Projected target: ${cur}${target.toFixed(2)} (+${targetPct}%) above neckline at ${cur}${neckline.toFixed(2)}`,
+        targetPct:+targetPct, targetPrice:target,
+        daysEst:Math.round(gap*0.8),
+        raw:{t1,t2,neckline}
+      });
+    }
+  }
+
+  // ── 4. Double Top ─────────────────────────────────────────────────────
+  if(peaks.length>=2){
+    const p1=peaks[peaks.length-2], p2=peaks[peaks.length-1];
+    const gap=p2.i-p1.i;
+    const diff=Math.abs(p1.v-p2.v)/Math.max(p1.v,p2.v)*100;
+    if(gap>=10 && diff<3 && p2.i>=n-15){
+      const neckline=Math.min(...closes.slice(p1.i,p2.i));
+      const height=Math.max(p1.v,p2.v)-neckline;
+      const target=neckline-height;
+      const targetPct=((target-price)/price*100).toFixed(1);
+      patterns.push({
+        type:'bear',icon:'M',name:'Double Top',
+        conf:diff<1.5?'high':'medium',
+        desc:`Two peaks formed at nearly the same level (${cur}${p1.v.toFixed(2)} and ${cur}${p2.v.toFixed(2)}), ${gap} bars apart — an M-shaped reversal showing sellers blocking upward progress at that price.`,
+        target:`Projected target: ${cur}${target.toFixed(2)} (${targetPct}%) below neckline at ${cur}${neckline.toFixed(2)}`,
+        targetPct:+targetPct, targetPrice:target,
+        daysEst:Math.round(gap*0.8),
+        raw:{p1,p2,neckline}
+      });
+    }
+  }
+
+  // ── 5. Ascending Triangle ─────────────────────────────────────────────
+  // Flat resistance (peaks within 1.5%) + rising troughs over last 30 bars
+  if(n>=30 && peaks.length>=2 && troughs.length>=2){
+    const recentPeaks=peaks.slice(-3);
+    const recentTroughs=troughs.slice(-3);
+    const peakPrices=recentPeaks.map(p=>p.v);
+    const peakRange=(Math.max(...peakPrices)-Math.min(...peakPrices))/Math.max(...peakPrices)*100;
+    const {slope:troughSlope}=linReg(recentTroughs.map(t=>t.v));
+    if(peakRange<2 && troughSlope>0){
+      const resistance=avg(peakPrices);
+      const target=resistance+(resistance-Math.min(...recentTroughs.map(t=>t.v)));
+      const targetPct=((target-price)/price*100).toFixed(1);
+      patterns.push({
+        type:'bull',icon:'△',name:'Ascending Triangle',
+        conf:'medium',
+        desc:`Resistance held flat near ${cur}${resistance.toFixed(2)} while support kept rising — buyers are gaining strength and compressing price. Breakout is typically upward.`,
+        target:`On breakout: target ${cur}${target.toFixed(2)} (+${targetPct}%)`,
+        targetPct:+targetPct, targetPrice:target,
+        daysEst:10,
+        raw:{resistance,troughSlope}
+      });
+    }
+  }
+
+  // ── 6. Descending Triangle ────────────────────────────────────────────
+  if(n>=30 && peaks.length>=2 && troughs.length>=2){
+    const recentPeaks=peaks.slice(-3);
+    const recentTroughs=troughs.slice(-3);
+    const troughPrices=recentTroughs.map(t=>t.v);
+    const troughRange=(Math.max(...troughPrices)-Math.min(...troughPrices))/Math.max(...troughPrices)*100;
+    const {slope:peakSlope}=linReg(recentPeaks.map(p=>p.v));
+    if(troughRange<2 && peakSlope<0){
+      const support=avg(troughPrices);
+      const target=support-(Math.max(...recentPeaks.map(p=>p.v))-support);
+      const targetPct=((target-price)/price*100).toFixed(1);
+      patterns.push({
+        type:'bear',icon:'▽',name:'Descending Triangle',
+        conf:'medium',
+        desc:`Support held flat near ${cur}${support.toFixed(2)} while resistance kept falling — sellers are gaining momentum. Breakout is typically downward.`,
+        target:`On breakdown: target ${cur}${target.toFixed(2)} (${targetPct}%)`,
+        targetPct:+targetPct, targetPrice:target,
+        daysEst:10,
+        raw:{support,peakSlope}
+      });
+    }
+  }
+
+  // ── 7. Head & Shoulders ───────────────────────────────────────────────
+  if(peaks.length>=3){
+    const [ls,head,rs]=peaks.slice(-3);
+    if(head.v>ls.v && head.v>rs.v && Math.abs(ls.v-rs.v)/ls.v<0.04 && rs.i>=n-20){
+      const neckline=Math.min(
+        Math.min(...closes.slice(ls.i,head.i)),
+        Math.min(...closes.slice(head.i,rs.i))
+      );
+      const target=neckline-(head.v-neckline);
+      const targetPct=((target-price)/price*100).toFixed(1);
+      patterns.push({
+        type:'bear',icon:'🏔️',name:'Head & Shoulders',
+        conf:'high',
+        desc:`Three peaks — left shoulder (${cur}${ls.v.toFixed(2)}), head (${cur}${head.v.toFixed(2)}), right shoulder (${cur}${rs.v.toFixed(2)}) — with shoulders at similar heights. One of the most reliable bearish reversal patterns.`,
+        target:`Target on neckline break: ${cur}${target.toFixed(2)} (${targetPct}%)`,
+        targetPct:+targetPct, targetPrice:target,
+        daysEst:15,
+        raw:{ls,head,rs,neckline}
+      });
+    }
+  }
+
+  // ── 8. Inverse Head & Shoulders ──────────────────────────────────────
+  if(troughs.length>=3){
+    const [ls,head,rs]=troughs.slice(-3);
+    if(head.v<ls.v && head.v<rs.v && Math.abs(ls.v-rs.v)/ls.v<0.04 && rs.i>=n-20){
+      const neckline=Math.max(
+        Math.max(...closes.slice(ls.i,head.i)),
+        Math.max(...closes.slice(head.i,rs.i))
+      );
+      const target=neckline+(neckline-head.v);
+      const targetPct=((target-price)/price*100).toFixed(1);
+      patterns.push({
+        type:'bull',icon:'🏞️',name:'Inverse Head & Shoulders',
+        conf:'high',
+        desc:`Three troughs — left shoulder (${cur}${ls.v.toFixed(2)}), head (${cur}${head.v.toFixed(2)}), right shoulder (${cur}${rs.v.toFixed(2)}) — with shoulders at similar depths. Strong bullish reversal signal.`,
+        target:`Target on neckline break: ${cur}${target.toFixed(2)} (+${targetPct}%)`,
+        targetPct:+targetPct, targetPrice:target,
+        daysEst:15,
+        raw:{ls,head,rs,neckline}
+      });
+    }
+  }
+
+  // ── 9 & 10. Support / Resistance Breakout ────────────────────────────
+  // Find level touched 2+ times in last 60 bars, check if price just cleared it
+  if(n>=20){
+    const lookback=Math.min(60,n-1);
+    const hist=closes.slice(n-lookback-1,n-1);
+    const recent=closes.slice(-3);
+    const recentAvg=avg(recent);
+    // Group price levels (bin into 0.5% buckets)
+    const bins={};
+    hist.forEach(c=>{
+      const key=Math.round(c/price*200);
+      bins[key]=(bins[key]||0)+1;
+    });
+    Object.entries(bins).forEach(([key,count])=>{
+      if(count>=3){
+        const level=+key*price/200;
+        const pctAbove=(price-level)/level*100;
+        if(pctAbove>0.5 && pctAbove<4){
+          patterns.push({
+            type:'bull',icon:'⬆️',name:'Resistance Breakout',
+            conf:count>=5?'high':'medium',
+            desc:`Price has cleared a resistance level around ${cur}${level.toFixed(2)} that was tested ${count} times over the last ${lookback} bars. Breakouts from frequently-tested levels tend to be sustained.`,
+            target:`Next resistance to watch: ${cur}${(level*1.05).toFixed(2)} (+${((level*1.05-price)/price*100).toFixed(1)}%)`,
+            targetPct:((level*1.05-price)/price*100), targetPrice:level*1.05,
+            daysEst:7,
+            raw:{level,count}
+          });
+        } else if(pctAbove<0 && pctAbove>-4){
+          patterns.push({
+            type:'bear',icon:'⬇️',name:'Support Breakdown',
+            conf:count>=5?'high':'medium',
+            desc:`Price has broken below a support level at ${cur}${level.toFixed(2)} that held ${count} times. Breakdowns from defended support levels can lead to sharp moves lower.`,
+            target:`Next support to watch: ${cur}${(level*0.95).toFixed(2)} (${((level*0.95-price)/price*100).toFixed(1)}%)`,
+            targetPct:((level*0.95-price)/price*100), targetPrice:level*0.95,
+            daysEst:7,
+            raw:{level,count}
+          });
+        }
+      }
+    });
+  }
+
+  return{patterns,price,cur,closes,dates};
+}
+
+// ── Render pattern list ──────────────────────────────────────────────────
+function renderPatterns(pr, cur){
+  const card=document.getElementById('dPatternCard');
+  if(!pr.patterns.length){
+    card.innerHTML=`<div class="no-pattern">No strong classical chart patterns detected in the current price data. This doesn't mean the chart is directionless — it means no algorithmically-verifiable pattern met the detection threshold. Check the signal analysis and moving average chart above for directional clues.</div>`;
+    return;
+  }
+  let html='<div class="pat-grid">';
+  pr.patterns.forEach(p=>{
+    const confMap={high:'conf-h',medium:'conf-m',low:'conf-l'};
+    html+=`<div class="pat-item ${p.type}">
+      <div class="pat-icon">${p.icon}</div>
+      <div class="pat-body">
+        <div class="pat-name" style="color:${p.type==='bull'?'var(--green)':p.type==='bear'?'var(--red)':'var(--amber)'}">${p.name}</div>
+        <div class="pat-desc">${p.desc}</div>
+        <div class="pat-target" style="color:${p.type==='bull'?'var(--green)':'var(--red)'}">${p.target}</div>
+        <span class="pat-conf ${confMap[p.conf]||'conf-m'}">${p.conf.toUpperCase()} CONFIDENCE · ~${p.daysEst} days to play out</span>
+      </div>
+    </div>`;
+  });
+  html+='</div>';
+  card.innerHTML=html;
+}
+
+// ── Render profit window ────────────────────────────────────────────────
+function renderProfitWindow(pr, d, cur){
+  const card=document.getElementById('dProfitWindow');
+  const price=d.price;
+  const bullPats=pr.patterns.filter(p=>p.type==='bull'&&p.targetPct>0);
+  const bearPats=pr.patterns.filter(p=>p.type==='bear'&&p.targetPct<0);
+  const mc=d.mcResult;
+
+  // Best bullish opportunity
+  const bestBull=bullPats.sort((a,b)=>b.targetPct-a.targetPct)[0];
+  // MC Day-10 upside (P75 as optimistic realistic)
+  const mcDay10=mc?mc.stats[9]:null;
+  const mcUpside=mcDay10?((mcDay10.p75-price)/price*100):null;
+  const mcDownside=mcDay10?((mcDay10.p25-price)/price*100):null;
+
+  // Determine overall profit window verdict
+  let banner,when,why,whenDays;
+
+  if(bestBull && bestBull.targetPct>3){
+    whenDays=bestBull.daysEst;
+    when=`Within ~${whenDays} trading days`;
+    why=`The <b>${bestBull.name}</b> pattern suggests a move toward <b>${cur}${bestBull.targetPrice.toFixed(2)} (+${bestBull.targetPct.toFixed(1)}%)</b>. ${mc?`Monte Carlo also shows 75th percentile of ${cur}${mcDay10.p75.toFixed(2)} by Day 10.`:''}`;
+    banner={color:'var(--green)',bg:'rgba(34,216,122,0.08)',border:'rgba(34,216,122,0.28)'};
+  } else if(d.total>=2 && mcUpside!==null && mcUpside>2){
+    whenDays=5;
+    when=`Within 5–10 trading days`;
+    why=`No strong pattern detected, but technical signals are bullish (${d.ov}) and Monte Carlo simulation shows 75th-percentile upside of <b>+${mcUpside.toFixed(1)}%</b> by Day 10. The probability skews upward but with no pattern catalyst, gains are likely gradual rather than explosive.`;
+    banner={color:'var(--green)',bg:'rgba(34,216,122,0.08)',border:'rgba(34,216,122,0.28)'};
+  } else if(d.rsi<36){
+    whenDays=3;
+    when=`Within 3–7 trading days`;
+    why=`RSI is at ${d.rsi} — deeply oversold territory. Historically, stocks bounce from oversold RSI within a few days. This is a short-term profit window, not a trend reversal — expect a 2–5% bounce before re-evaluating.`;
+    banner={color:'var(--amber)',bg:'rgba(245,158,11,0.08)',border:'rgba(245,158,11,0.28)'};
+  } else if(bearPats.length>bullPats.length){
+    when='Not in the next 10 days';
+    why=`Bearish patterns dominate${bestBull?'':' and there are no bullish catalysts'}. The better opportunity may be <b>after</b> this stock completes its downward move — wait for it to find support, then look for a reversal pattern.`;
+    banner={color:'var(--red)',bg:'rgba(240,82,82,0.08)',border:'rgba(240,82,82,0.28)'};
+  } else {
+    when='Unclear — no strong catalyst';
+    why=`Mixed signals — no pattern or technical trigger is pointing to a clear profit window in the next 10 days. ${mc?`Monte Carlo median for Day 10 is ${cur}${mcDay10.median.toFixed(2)} (${((mcDay10.median-price)/price*100).toFixed(1)}% from today), but the range is wide.`:'Add more price history for a Monte Carlo estimate.'} Best action: watch and wait for a cleaner setup.`;
+    banner={color:'var(--amber)',bg:'rgba(245,158,11,0.08)',border:'rgba(245,158,11,0.28)'};
+  }
+
+  let mcGrid='';
+  if(mc){
+    const p5=mc.stats[4],p10=mc.stats[9];
+    mcGrid=`<div class="pw-grid" style="margin-top:14px">
+      <div class="pw-card">
+        <div class="pw-lbl">Day 5 median</div>
+        <div class="pw-val" style="color:${p5.median>price?'var(--green)':'var(--red)'}">${cur}${p5.median.toFixed(2)}</div>
+        <div class="pw-sub">${((p5.median-price)/price*100).toFixed(1)}% from today</div>
+      </div>
+      <div class="pw-card">
+        <div class="pw-lbl">Day 10 median</div>
+        <div class="pw-val" style="color:${p10.median>price?'var(--green)':'var(--red)'}">${cur}${p10.median.toFixed(2)}</div>
+        <div class="pw-sub">${((p10.median-price)/price*100).toFixed(1)}% from today</div>
+      </div>
+      <div class="pw-card">
+        <div class="pw-lbl">Day 10 best case (P75)</div>
+        <div class="pw-val" style="color:var(--green)">${cur}${p10.p75.toFixed(2)}</div>
+        <div class="pw-sub">+${((p10.p75-price)/price*100).toFixed(1)}% — 25% of simulations beat this</div>
+      </div>
+    </div>`;
+  }
+
+  card.innerHTML=`
+    <div class="pw-banner" style="background:${banner.bg};border:1px solid ${banner.border};border-radius:10px;padding:16px 18px;margin-bottom:${mc?'0':'0'}">
+      <div class="pw-when" style="color:${banner.color}">${when}</div>
+      <div class="pw-body" style="color:var(--fg2)">${why}</div>
+    </div>
+    ${mcGrid}
+    <div class="mc-note" style="margin-top:12px">⚠️ "Major profit" is defined here as a move >3% from today's price. Timing is estimated from pattern completion windows and Monte Carlo percentiles — not guaranteed. Always set a stop-loss.</div>`;
+}
+
+// ── 10-day forward projection chart ──────────────────────────────────────
+function drawFwdChart(d, pr, cur){
+  const canvas=document.getElementById('chartFwd');
+  if(!canvas) return;
+  if(chartFwd){chartFwd.destroy();chartFwd=null;}
+
+  const fwdNote=document.getElementById('fwdNote');
+
+  if(!d.mcResult){
+    const ctx2=canvas.getContext('2d');
+    ctx2.clearRect(0,0,canvas.width,canvas.height);
+    ctx2.font='12px Inter';ctx2.fillStyle='#52577a';ctx2.textAlign='center';
+    ctx2.fillText('Need 40+ rows of data to render the forward projection.',canvas.width/2,canvas.height/2);
+    fwdNote.style.display='none';
+    return;
+  }
+
+  // Historical tail (last 20 days) + 10 forward days
+  const histTail=d.closes.slice(-20);
+  const histDates=d.dates.slice(-20);
+  const fwdLabels=Array.from({length:10},(_,i)=>`Day ${i+1}`);
+  const labels=[...histDates,...fwdLabels];
+  const nH=histTail.length;
+  const pad=arr=>new Array(nH).fill(null).concat(arr);
+
+  const stats=d.mcResult.stats; // 10 days
+  const p10=pad(stats.map(s=>s.p10));
+  const p90=pad(stats.map(s=>s.p90));
+  const med=pad(stats.map(s=>s.median));
+  const hist=[...histTail,...new Array(10).fill(null)];
+
+  // Pattern target lines (horizontal annotation via dataset)
+  const patDatasets=[];
+  pr.patterns.slice(0,2).forEach(p=>{
+    const col=p.type==='bull'?'rgba(34,216,122,0.7)':'rgba(240,82,82,0.7)';
+    patDatasets.push({
+      label:`${p.name} target`,
+      data:[...new Array(nH).fill(null),...new Array(10).fill(p.targetPrice)],
+      borderColor:col,borderWidth:1.5,borderDash:[6,4],
+      pointRadius:0,fill:false,tension:0
+    });
+  });
+
+  // Sample spaghetti paths
+  const spaghetti=[];
+  for(let i=0;i<10;i++){
+    const path=d.mcResult.samplePaths[i];
+    spaghetti.push({
+      label:'',data:pad(Array.from(path).slice(1)),
+      borderColor:'rgba(79,142,247,0.1)',borderWidth:1,
+      pointRadius:0,fill:false,tension:.25
+    });
+  }
+
+  chartFwd=new Chart(canvas,{
+    type:'line',
+    data:{labels,datasets:[
+      ...spaghetti,
+      {label:'P90 (optimistic)',data:p90,borderColor:'rgba(34,216,122,.55)',borderWidth:1.5,borderDash:[4,3],pointRadius:0,fill:'+1',backgroundColor:'rgba(79,142,247,.05)',tension:.25},
+      {label:'P10 (pessimistic)',data:p10,borderColor:'rgba(240,82,82,.55)',borderWidth:1.5,borderDash:[4,3],pointRadius:0,fill:false,tension:.25},
+      {label:'Median forecast',data:med,borderColor:'rgba(245,158,11,.95)',borderWidth:2,pointRadius:0,fill:false,tension:.25},
+      {label:'Historical price',data:hist,borderColor:'rgba(226,230,248,.9)',borderWidth:2,pointRadius:0,fill:false,tension:.25},
+      ...patDatasets
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      interaction:{mode:'index',intersect:false},
+      plugins:{
+        legend:{labels:{color:'#9aa0c8',font:{family:'IBM Plex Mono',size:10},boxWidth:16,padding:10,
+          filter:item=>item.text!==''}},
+        tooltip:{filter:item=>item.dataset.label!=='',
+          callbacks:{label:ctx=>`${ctx.dataset.label}: ${cur}${(ctx.raw||0).toFixed(2)}`}}
+      },
+      scales:{
+        x:{ticks:{color:'#52577a',font:{size:9},maxRotation:0,maxTicksLimit:12},grid:{color:'rgba(255,255,255,0.03)'}},
+        y:{ticks:{color:'#52577a',font:{family:'IBM Plex Mono',size:9},callback:v=>`${cur}${(+v).toFixed(0)}`},grid:{color:'rgba(255,255,255,0.04)'}}
+      }
+    },
+    plugins:[{
+      id:'vertDiv',
+      afterDraw(chart){
+        const{ctx:c,chartArea:{top,bottom},scales:{x}}=chart;
+        // Draw vertical dashed line between historical and forecast
+        const xPos=x.getPixelForValue(nH-1);
+        c.save();
+        c.strokeStyle='rgba(255,255,255,0.2)';
+        c.lineWidth=1;
+        c.setLineDash([4,4]);
+        c.beginPath();c.moveTo(xPos,top);c.lineTo(xPos,bottom);c.stroke();
+        c.setLineDash([]);
+        c.font='10px IBM Plex Mono';
+        c.fillStyle='rgba(255,255,255,0.35)';
+        c.fillText('TODAY →',xPos+6,top+14);
+        c.restore();
+      }
+    }]
+  });
+
+  // Build note text listing patterns
+  const patText=pr.patterns.length
+    ? `Dashed horizontal lines show price targets from detected patterns: ${pr.patterns.map(p=>p.name).join(', ')}.`
+    : 'No chart patterns were detected — the projection is based on Monte Carlo simulation only.';
+  fwdNote.style.display='block';
+  fwdNote.innerHTML=`📊 <b>How to read this chart:</b> The white line is historical price. After the "TODAY" divider, the <b style="color:rgba(245,158,11,.9)">amber line</b> is the median forecast from 10,000 Monte Carlo simulations. The green/red band is the 80% confidence interval (P10–P90) — the actual price should land inside this band 80% of the time if the model's assumptions hold. ${patText} Uncertainty widens the further right you look — this is mathematically correct, not a flaw.`;
+}
+
+
 function makeVerdict(d){
   if(d.total>=2) return `<strong>${d.name}</strong> shows a <strong style="color:var(--green)">bullish setup</strong> — ${d.total} of 4 signals positive. Price above key moving averages with positive momentum. 3-day outlook: <strong>UP</strong>. First target: ${f(d.res)}. Trend holds as long as price stays above the 20-day MA at ${f(d.ma20)}.`;
   if(d.total<=-2) return `<strong>${d.name}</strong> shows a <strong style="color:var(--red)">bearish setup</strong> — ${Math.abs(d.total)} of 4 signals negative. Below key MAs with negative momentum. 3-day outlook: <strong>DOWN</strong>. Critical level: ${f(d.sup)}. Recovery needs support to hold and RSI to hit oversold territory.`;
@@ -1252,6 +1967,270 @@ function makeVerdict(d){
 }
 
 function setText(id,val){const e=document.getElementById(id);if(e)e.textContent=val;}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════════════════════════════
+function switchTab(name){
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    b.classList.toggle('active',['stock','edge'][i]===name);
+  });
+  document.querySelectorAll('.tab-pane').forEach(p=>{
+    p.classList.toggle('active',p.id==='tab-'+name);
+  });
+}
+
+function toggleHood(){
+  const h=document.getElementById('teHood');
+  const a=document.getElementById('hoodArrow');
+  const show=h.style.display==='none';
+  h.style.display=show?'block':'none';
+  a.textContent=show?'▲ hide':'▼ show';
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// DEMO DATA LOADER
+// ═══════════════════════════════════════════════════════════════════════
+function loadEdgeDemo(){
+  const rows=['Date,Open,High,Low,Close,Volume'];
+  let p=172,seed=99;
+  function rng(){seed=(seed*1664525+1013904223)>>>0;return seed/0xffffffff;}
+  const start=new Date('2024-12-02');
+  let count=0;
+  for(let d=new Date(start);count<130;d.setDate(d.getDate()+1)){
+    if(d.getDay()===0||d.getDay()===6) continue;
+    const chg=(rng()-0.48)*0.025;
+    p=Math.max(p*(1+chg),1);
+    const h=p*(1+rng()*0.012),l=p*(1-rng()*0.012);
+    rows.push(`${d.toISOString().slice(0,10)},${(p*0.99).toFixed(2)},${h.toFixed(2)},${l.toFixed(2)},${p.toFixed(2)},${Math.round(3e6+rng()*5e6)}`);
+    count++;
+  }
+  document.getElementById('teCsv').value=rows.join('\n');
+  document.getElementById('teCapital').value='100000';
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// SMA HELPER
+// ═══════════════════════════════════════════════════════════════════════
+function sma(closes,n){
+  return closes.map((_,i)=>{
+    if(i<n-1) return null;
+    let s=0; for(let j=i-n+1;j<=i;j++) s+=closes[j];
+    return s/n;
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// BACKTEST ENGINE — MA crossover for each timeframe
+// ═══════════════════════════════════════════════════════════════════════
+function backtestMA(closes,fastN,slowN,holdN){
+  const fast=sma(closes,fastN);
+  const slow=sma(closes,slowN);
+  const trades=[];
+  let inTrade=false,entryPrice=0,entryDay=0;
+  for(let i=1;i<closes.length;i++){
+    if(fast[i]===null||slow[i]===null) continue;
+    if(!inTrade&&fast[i]>slow[i]&&fast[i-1]!==null&&fast[i-1]<=slow[i-1]){
+      inTrade=true;entryPrice=closes[i];entryDay=i;
+    }
+    if(inTrade){
+      const held=i-entryDay;
+      const crossedBack=fast[i]<slow[i]&&fast[i-1]!==null&&fast[i-1]>=slow[i-1];
+      if(held>=holdN||crossedBack||i===closes.length-1){
+        const pnlPct=((closes[i]-entryPrice)/entryPrice)*100;
+        trades.push({pnlPct,win:pnlPct>0});
+        inTrade=false;
+      }
+    }
+  }
+  return trades;
+}
+
+function calcStats(trades){
+  if(!trades||trades.length<5) return null;
+  const wins=trades.filter(t=>t.win);
+  const losses=trades.filter(t=>!t.win);
+  const winRate=wins.length/trades.length;
+  const avgWin=wins.length>0?wins.reduce((s,t)=>s+Math.abs(t.pnlPct),0)/wins.length:0;
+  const avgLoss=losses.length>0?losses.reduce((s,t)=>s+Math.abs(t.pnlPct),0)/losses.length:0.01;
+  const rrRatio=avgWin/avgLoss;
+  const expectancy=((1+rrRatio)*winRate)-1;
+  const breakEven=avgLoss/(avgLoss+avgWin);
+  const kelly=Math.max(0,(rrRatio*winRate-(1-winRate))/rrRatio);
+  let ruinProb=1;
+  if(expectancy>0){const r=(1-expectancy)/(1+expectancy);ruinProb=Math.min(1,Math.pow(r,50));}
+  const maxStreak=winRate<1?Math.ceil(Math.log(0.05)/Math.log(1-winRate)):0;
+  return{trades:trades.length,wins:wins.length,losses:losses.length,winRate,avgWin,avgLoss,rrRatio,expectancy,breakEven,kelly,halfKelly:kelly/2,ruinProb,maxStreak};
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// PLAIN ENGLISH VERDICT GENERATOR
+// ═══════════════════════════════════════════════════════════════════════
+function verdict(stats,tfName,capital,cur){
+  if(!stats||stats.trades<5){
+    return{ok:null,label:'Not enough data',summary:'Not enough historical data to test this timeframe. Add more price history (1–2 years ideal).',color:'var(--fg3)',bg:'var(--s2)',border:'var(--border2)',detail:null};
+  }
+  const exp=stats.expectancy;
+  const wr=(stats.winRate*100).toFixed(0);
+  const posSize=Math.max(Math.round(stats.halfKelly*capital),Math.round(capital*0.01));
+  const avgGain=stats.avgWin.toFixed(1);
+  const avgLoss2=stats.avgLoss.toFixed(1);
+  const streak=stats.maxStreak;
+  const ruin=(stats.ruinProb*100).toFixed(0);
+  if(exp>0.03){
+    return{ok:true,label:'✅ Profitable',
+      summary:`This stock historically works for ${tfName} trading. You won ${wr}% of trades with average gains of ${avgGain}% — enough to make money even after losses of ${avgLoss2}%.`,
+      detail:`Put <b>${cur}${posSize.toLocaleString('en-IN')}</b> per trade. Expect to lose ${streak} trades in a row sometimes — that is normal, do not panic. Probability of losing half your money before recovering: <b>${ruin}%</b>.`,
+      color:'var(--green)',bg:'rgba(34,216,122,0.06)',border:'rgba(34,216,122,0.25)'};
+  } else if(exp>-0.02){
+    return{ok:'maybe',label:'⚠️ Too close to call',
+      summary:`This stock is roughly break-even for ${tfName} trading. You won ${wr}% of trades — right on the edge of being profitable, but not clearly so.`,
+      detail:`If you trade this timeframe, keep position sizes very small — no more than <b>${cur}${Math.round(posSize*0.5).toLocaleString('en-IN')}</b> per trade. The edge is too thin to rely on.`,
+      color:'var(--amber)',bg:'rgba(245,158,11,0.06)',border:'rgba(245,158,11,0.25)'};
+  } else {
+    return{ok:false,label:'❌ Not profitable',
+      summary:`This stock has not been profitable for ${tfName} trading historically. You would have won only ${wr}% of trades, and losses outweighed wins.`,
+      detail:`Do not trade this stock on a ${tfName} timeframe right now. Either wait for a clearer trend, or look at a different stock.`,
+      color:'var(--red)',bg:'rgba(240,82,82,0.06)',border:'rgba(240,82,82,0.25)'};
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// OVERALL BANNER
+// ═══════════════════════════════════════════════════════════════════════
+function overallBanner(verdicts,capital,cur,stockName){
+  const profitable=verdicts.filter(v=>v.ok===true).length;
+  const maybe=verdicts.filter(v=>v.ok==='maybe').length;
+  const nodata=verdicts.filter(v=>v.ok===null).length;
+  if(profitable>=2){
+    return{emoji:'✅',heading:`Yes — you can trade ${stockName} for profit`,
+      body:`Based on the historical data, this stock has shown a real edge in ${profitable} out of 3 timeframes. A simple, consistent approach would have made money more often than it lost. The math says: trade it.`,
+      color:'var(--green)',bg:'rgba(34,216,122,0.08)',border:'rgba(34,216,122,0.3)'};
+  } else if(profitable===1&&maybe>=1){
+    return{emoji:'⚠️',heading:`Maybe — ${stockName} has some potential`,
+      body:`This stock shows a profitable edge in one timeframe and a borderline result in another. You could trade it, but only on the timeframe marked profitable, and with smaller position sizes.`,
+      color:'var(--amber)',bg:'rgba(245,158,11,0.08)',border:'rgba(245,158,11,0.3)'};
+  } else if(profitable===1){
+    return{emoji:'⚠️',heading:`Only in one timeframe — be selective with ${stockName}`,
+      body:`Only one of the three timeframes shows a profitable edge. Stick strictly to that timeframe and do not deviate.`,
+      color:'var(--amber)',bg:'rgba(245,158,11,0.08)',border:'rgba(245,158,11,0.3)'};
+  } else if(nodata>=2){
+    return{emoji:'📊',heading:`Need more data to judge ${stockName}`,
+      body:`There is not enough price history to run a reliable backtest. Download at least 1–2 years of daily price data and try again.`,
+      color:'var(--fg3)',bg:'var(--s2)',border:'var(--border2)'};
+  } else {
+    return{emoji:'❌',heading:`No — ${stockName} is not profitable to trade right now`,
+      body:`Across all three timeframes, this stock's historical price action does not show a consistent edge. Trading it would likely result in losses. Wait for a stronger trend or look at a different stock.`,
+      color:'var(--red)',bg:'rgba(240,82,82,0.08)',border:'rgba(240,82,82,0.3)'};
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// ACTION CARD
+// ═══════════════════════════════════════════════════════════════════════
+function buildActionCard(tfResults,capital,cur){
+  const best=tfResults.filter(t=>t.v.ok===true).sort((a,b)=>b.s.expectancy-a.s.expectancy)[0];
+  if(!best) return `<p>None of the timeframes tested show a clear profitable edge on this stock right now. The best action is <b>do not trade it</b>. Check back in 4–6 weeks.</p>`;
+  const s=best.s,tf=best.tf;
+  const posSize=Math.max(Math.round(s.halfKelly*capital),Math.round(capital*0.01));
+  return `<div style="display:flex;flex-direction:column;gap:12px">
+    <div style="background:var(--s2);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;color:var(--fg3);margin-bottom:6px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em">Best opportunity found</div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:4px">${tf.name} trading</div>
+      <div style="font-size:12px;color:var(--fg3)">Won ${(s.winRate*100).toFixed(0)}% of historical trades · avg gain ${s.avgWin.toFixed(1)}% · avg loss ${s.avgLoss.toFixed(1)}%</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div style="background:var(--s2);border-radius:10px;padding:14px 16px">
+        <div style="font-size:11px;color:var(--fg3);margin-bottom:4px">Put this much per trade</div>
+        <div style="font-family:var(--mono);font-size:20px;font-weight:600;color:var(--green)">${cur}${posSize.toLocaleString('en-IN')}</div>
+        <div style="font-size:11px;color:var(--fg3);margin-top:3px">out of your ${cur}${capital.toLocaleString('en-IN')}</div>
+      </div>
+      <div style="background:var(--s2);border-radius:10px;padding:14px 16px">
+        <div style="font-size:11px;color:var(--fg3);margin-bottom:4px">How long to hold</div>
+        <div style="font-size:17px;font-weight:600;color:var(--fg)">${tf.holdDesc}</div>
+        <div style="font-size:11px;color:var(--fg3);margin-top:3px">then exit and review</div>
+      </div>
+    </div>
+    <div style="background:var(--s2);border-radius:10px;padding:14px 16px">
+      <div style="font-size:11px;color:var(--fg3);margin-bottom:8px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em">Simple rules to follow</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--fg2);line-height:1.6">
+        <div>📌 Buy when the short-term price trend crosses <b>above</b> the longer trend — that is your entry signal.</div>
+        <div>📌 If the trade moves against you by more than <b>${s.avgLoss.toFixed(1)}%</b>, exit immediately. Do not wait and hope.</div>
+        <div>📌 You will lose ${s.maxStreak} trades in a row sometimes. This is normal — do not abandon your plan when it happens.</div>
+        <div>📌 Never put more than <b>2% of total capital</b> in a single trade, no matter what.</div>
+        <div>📌 Re-run this analysis monthly — market conditions change.</div>
+      </div>
+    </div>
+  </div>`;
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// MAIN RUNNER
+// ═══════════════════════════════════════════════════════════════════════
+function runTradeEdge(){
+  const raw=document.getElementById('teCsv').value.trim();
+  const capital=+(document.getElementById('teCapital').value)||0;
+  const cur=document.getElementById('teCurr').value;
+  const errEl=document.getElementById('teErr');
+  errEl.style.display='none';
+  if(!raw){errEl.style.display='block';errEl.textContent='Please paste the stock price CSV first.';return;}
+  if(!capital||capital<100){errEl.style.display='block';errEl.textContent='Please enter your capital amount (minimum 100).';return;}
+  let entries;
+  try{entries=parseCSV(raw);}
+  catch(e){errEl.style.display='block';errEl.textContent='Could not read the CSV: '+e.message;return;}
+  const closes=entries.map(e=>e.close);
+  const stockName=document.getElementById('iName').value.trim().toUpperCase()||'this stock';
+  const timeframes=[
+    {name:'Short-term', label:'Days to weeks',  fastN:5,  slowN:20,  holdN:5,  holdDesc:'3–7 days'},
+    {name:'Medium-term',label:'Weeks to months', fastN:20, slowN:50,  holdN:20, holdDesc:'2–4 weeks'},
+    {name:'Long-term',  label:'Months',          fastN:50, slowN:200, holdN:60, holdDesc:'1–3 months'},
+  ];
+  const tfResults=timeframes.map(tf=>{
+    const trades=backtestMA(closes,tf.fastN,tf.slowN,tf.holdN);
+    const s=calcStats(trades);
+    const v=verdict(s,tf.name,capital,cur);
+    return{tf,s,v};
+  });
+  const verdicts=tfResults.map(r=>r.v);
+  const banner=overallBanner(verdicts,capital,cur,stockName);
+  // Render banner
+  const bannerEl=document.getElementById('teBanner');
+  bannerEl.style.background=banner.bg;
+  bannerEl.style.borderColor=banner.border;
+  bannerEl.innerHTML=`<div style="font-size:28px;margin-bottom:8px">${banner.emoji}</div>
+    <div style="font-size:20px;font-weight:700;letter-spacing:-.4px;color:${banner.color};margin-bottom:10px">${banner.heading}</div>
+    <div style="font-size:13px;color:var(--fg2);line-height:1.75;max-width:680px">${banner.body}</div>`;
+  // Render timeframe cards
+  document.getElementById('teTFGrid').innerHTML=tfResults.map(({tf,s,v})=>`
+    <div style="background:${v.bg};border:1px solid ${v.border};border-radius:12px;padding:16px">
+      <div style="font-size:10px;font-family:var(--mono);color:var(--fg3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">${tf.label}</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:4px;color:${v.color}">${tf.name}</div>
+      <div style="font-size:13px;font-weight:600;color:var(--fg);margin-bottom:8px">${v.label}</div>
+      <div style="font-size:12px;color:var(--fg3);line-height:1.6;margin-bottom:${v.detail?'10px':'0'}">${v.summary}</div>
+      ${v.detail?`<div style="font-size:11px;color:var(--fg2);background:var(--s2);border-radius:8px;padding:10px 12px;line-height:1.65">${v.detail}</div>`:''}
+    </div>`).join('');
+  // Action card
+  document.getElementById('teAction').innerHTML=buildActionCard(tfResults,capital,cur);
+  // Under the hood grid
+  document.getElementById('teHoodGrid').innerHTML=tfResults.map(({tf,s})=>{
+    if(!s) return `<div class="te-card"><div style="font-size:12px;font-weight:600;margin-bottom:6px">${tf.name}</div><span style="color:var(--fg3);font-size:11px">Not enough data</span></div>`;
+    return `<div class="te-card">
+      <div style="font-size:12px;font-weight:600;margin-bottom:10px;color:var(--fg)">${tf.name}</div>
+      <div class="te-metric"><span class="te-metric-lbl">Trades simulated</span><span class="te-metric-val" style="font-size:13px">${s.trades}</span></div>
+      <div class="te-metric"><span class="te-metric-lbl">Win rate</span><span class="te-metric-val" style="font-size:13px">${(s.winRate*100).toFixed(1)}%</span></div>
+      <div class="te-metric"><span class="te-metric-lbl">Avg gain per win</span><span class="te-metric-val" style="font-size:13px;color:var(--green)">+${s.avgWin.toFixed(2)}%</span></div>
+      <div class="te-metric"><span class="te-metric-lbl">Avg loss per loss</span><span class="te-metric-val" style="font-size:13px;color:var(--red)">−${s.avgLoss.toFixed(2)}%</span></div>
+      <div class="te-metric"><span class="te-metric-lbl">Expectancy</span><span class="te-metric-val" style="font-size:13px;color:${s.expectancy>0?'var(--green)':'var(--red)'}">${s.expectancy>0?'+':''}${(s.expectancy*100).toFixed(3)}%</span></div>
+      <div class="te-metric"><span class="te-metric-lbl">Suggested position</span><span class="te-metric-val" style="font-size:13px">${cur}${Math.max(Math.round(s.halfKelly*capital),Math.round(capital*0.01)).toLocaleString('en-IN')}</span></div>
+      <div class="te-metric"><span class="te-metric-lbl">Ruin risk</span><span class="te-metric-val" style="font-size:13px;color:${s.ruinProb>0.3?'var(--red)':s.ruinProb>0.1?'var(--amber)':'var(--green)'}">${(s.ruinProb*100).toFixed(0)}%</span></div>
+    </div>`;
+  }).join('');
+  document.getElementById('teResults').style.display='block';
+  document.getElementById('teResults').scrollIntoView({behavior:'smooth',block:'start'});
+}
 </script>
 </body>
 </html>
